@@ -8,8 +8,8 @@ import org.springframework.boot.context.ApplicationPidFileWriter;
 public class OnOffApiApplication {
 
   public static void main(String[] args) {
-      SpringApplication springApplication = new SpringApplication(OnOffApiApplication.class);
-      springApplication.addListeners(new ApplicationPidFileWriter());
-      springApplication.run(args);
+    SpringApplication springApplication = new SpringApplication(OnOffApiApplication.class);
+    springApplication.addListeners(new ApplicationPidFileWriter());
+    springApplication.run(args);
   }
 }
