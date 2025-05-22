@@ -6,13 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /*
-* 중복 예외 처리
-* */
+ * 중복 예외 처리
+ * */
 @Getter
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 @NoArgsConstructor
-public class AlreadyException extends RuntimeException{
+public class AlreadyExistException extends RuntimeException {
   private String message;
 
-  public AlreadyException(String message) { super(message); }
+  public AlreadyExistException(String message) {
+    super(message);
+    this.message = message;
+  }
 }
