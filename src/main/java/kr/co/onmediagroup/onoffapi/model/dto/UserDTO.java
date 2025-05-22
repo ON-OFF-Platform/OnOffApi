@@ -3,6 +3,7 @@ package kr.co.onmediagroup.onoffapi.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -42,6 +43,7 @@ public class UserDTO {
 
   @Data
   @AllArgsConstructor
+  @NoArgsConstructor
   public static class UserReqDTO{
     private String userId;
     private String userName;
@@ -55,6 +57,7 @@ public class UserDTO {
 
   @Data
   @AllArgsConstructor
+  @NoArgsConstructor
   public static class UserResDTO{
     private String userName;
     private String userEmail;

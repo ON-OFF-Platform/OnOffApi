@@ -1,6 +1,8 @@
 package kr.co.onmediagroup.onoffapi.service;
 
 import jakarta.transaction.Transactional;
+import kr.co.onmediagroup.onoffapi.exception.AlreadyException;
+import kr.co.onmediagroup.onoffapi.exception.BadRequestException;
 import kr.co.onmediagroup.onoffapi.model.dto.UserDTO;
 import kr.co.onmediagroup.onoffapi.model.entity.UserEntity;
 import kr.co.onmediagroup.onoffapi.repository.UserRepository;
@@ -30,12 +32,22 @@ public class AuthService {
   ) {
     // 이메일 중복 체크
     if (userRepository.findById(email).isPresent()) {
-      throw new IllegalArgumentException("이미 등록된 이메일입니다.");
+      throw new AlreadyException("already exist email");
     }
 
     // 소셜 ID 중복 체크
     if (socialId != null && userRepository.findBySocialId(socialId).isPresent()) {
-      throw new IllegalArgumentException("이미 등록된 소셜 계정입니다.");
+      throw new AlreadyException("already exist social id");
+    }
+
+    // 일반 로그인 시, 비밀번호 빈값 허용 안됨
+    if (socialProvider == null && (password == null || password.isEmpty())) {
+      throw new BadRequestException("not null password");
+    }
+
+    // 소셜 로그인 시, 비밀번호 입력 안됨
+    if (socialProvider != null && password != null && !password.isEmpty()) {
+      throw new BadRequestException("not allowed password");
     }
 
     UserEntity userEntity = UserEntity.builder()

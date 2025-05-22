@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import kr.co.onmediagroup.onoffapi.model.dto.UserDTO;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 @Table(name = "user")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@DynamicUpdate
 public class UserEntity {
 
   @Id
@@ -32,7 +34,6 @@ public class UserEntity {
   @Column(name = "user_name")
   private String userName;
 
-  @NotBlank
   @Size(max = 255)
   @Column(name = "user_password")
   private String userPassword;
@@ -68,11 +69,11 @@ public class UserEntity {
   @Column(name = "social_id")
   private String socialId;
 
-  @CreatedDate
   @Column(name = "created_at")
+  @CreatedDate
   private LocalDateTime createdAt;
 
-  @LastModifiedDate
   @Column(name = "updated_at")
+  @LastModifiedDate
   private LocalDateTime updatedAt;
 }
