@@ -1,7 +1,6 @@
 package kr.co.onmediagroup.onoffapi.controller;
 
 import jakarta.validation.Valid;
-import kr.co.onmediagroup.onoffapi.model.dto.UserDTO;
 import kr.co.onmediagroup.onoffapi.model.vo.UserVO;
 import kr.co.onmediagroup.onoffapi.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -18,18 +17,9 @@ public class AuthController {
 
   @PostMapping("/login")
   @ResponseStatus(value = HttpStatus.OK)
-  public UserDTO.UserResDTO login(@Valid @RequestBody UserVO.UserReqVO userReqVO) {
-
-    UserDTO.UserResDTO userDTO = this.authService.createUser(
-      userReqVO.userName(),
-      userReqVO.userPassword(),
-      userReqVO.userEmail(),
-      userReqVO.userBirth(),
-      userReqVO.authType(),
-      userReqVO.socialProvider(),
-      userReqVO.socialId()
-    );
-
-    return userDTO;
+  public UserVO.LoginResVO login(
+    @Valid @RequestBody UserVO.LoginReqVO loginReqVO
+  ) {
+    return this.authService.login(loginReqVO);
   }
 }

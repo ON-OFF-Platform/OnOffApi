@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import kr.co.onmediagroup.onoffapi.model.dto.UserDTO;
+import kr.co.onmediagroup.onoffapi.model.dto.User;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
@@ -46,12 +46,16 @@ public class UserEntity {
   @NotNull
   @Enumerated(EnumType.STRING)
   @Column(name = "user_level")
-  private UserDTO.UserLevel userLevel = UserDTO.UserLevel.USER;
+  private User.UserLevel userLevel = User.UserLevel.USER;
 
   @NotNull
   @Enumerated(EnumType.STRING)
   @Column(name = "active_yn")
-  private UserDTO.UserActiveYn activeYn = UserDTO.UserActiveYn.Y;
+  private User.UserActiveYn activeYn = User.UserActiveYn.Y;
+
+  @NotNull
+  @Column(name = "login_fail_count")
+  private Integer loginFailCount = 0;
 
   @Column(name = "user_birth")
   private LocalDate userBirth;
@@ -59,11 +63,11 @@ public class UserEntity {
   @NotNull
   @Enumerated(EnumType.STRING)
   @Column(name = "auth_type")
-  private UserDTO.UserAuthType authType = UserDTO.UserAuthType.N;
+  private User.UserAuthType authType = User.UserAuthType.N;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "social_provider")
-  private UserDTO.UserSocialProvider socialProvider;
+  private User.UserSocialProvider socialProvider;
 
   @Size(max = 255)
   @Column(name = "social_id")
@@ -76,4 +80,19 @@ public class UserEntity {
   @Column(name = "updated_at")
   @LastModifiedDate
   private LocalDateTime updatedAt;
+
+  // 로그인 실패 기록 초기화
+  public UserEntity clearFailedLogin() {
+    this.loginFailCount = 0;
+    return this;
+  }
+
+  // 로그인 실패 기록 증가. 최대 실패 횟수 이상 실패 시, 사용자 비활성화
+  public UserEntity increaseFailedLogin(Integer maxFailedLoginCount) {
+    this.loginFailCount = this.loginFailCount + 1;
+    if (loginFailCount >= maxFailedLoginCount) {
+      this.activeYn = User.UserActiveYn.N;
+    }
+    return this;
+  }
 }
