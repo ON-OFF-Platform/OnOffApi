@@ -31,7 +31,7 @@ public class LoginException extends RuntimeException{
   // 비활성화 계정 로그인 시도
   public static class DeactivatedUser extends LoginException {
     public DeactivatedUser(Integer loginFailCount) {
-      super("too many failed login", loginFailCount);
+      super("deactivated user", loginFailCount);
     }
   }
 
