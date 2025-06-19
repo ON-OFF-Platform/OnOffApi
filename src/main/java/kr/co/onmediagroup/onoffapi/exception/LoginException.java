@@ -2,6 +2,9 @@ package kr.co.onmediagroup.onoffapi.exception;
 
 import lombok.Getter;
 
+/**
+ * 로그인 관련 예외 처리
+ * */
 @Getter
 public class LoginException extends RuntimeException{
   private final Integer loginFailCount;
