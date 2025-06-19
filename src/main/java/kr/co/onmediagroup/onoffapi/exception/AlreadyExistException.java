@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-/*
+/**
  * 중복 예외 처리
  * */
 @Getter

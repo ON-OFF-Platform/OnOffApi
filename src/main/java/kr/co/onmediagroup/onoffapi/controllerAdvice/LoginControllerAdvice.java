@@ -9,6 +9,11 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * 로그인 관련 예외를 전역 처리하는 컨트롤러 어드바이스
+ *
+ * 예외 응답에 로그인 실패 횟수가 있으면 포함하여 클라이언트에 전달
+ * */
 @RestControllerAdvice
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)

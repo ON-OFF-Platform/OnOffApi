@@ -12,6 +12,17 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Jackson 전역 설정 유틸리티 클래스
+ *
+ * ObjectMapper 인스턴스를 전역에서 재사용할 수 있도록 제공
+ *
+ * 적용 포맷:
+ * - LocalDate     → "yyyy-MM-dd"
+ * - LocalTime     → "kk:mm:ss"  (1~24 시각)
+ * - LocalDateTime → "yyyy-MM-dd'T'kk:mm:ss"
+ *
+ * */
 public class JacksonUtils {
   public static final ObjectMapper OBJECT_MAPPER = createObjectMapper();
 
@@ -19,8 +30,8 @@ public class JacksonUtils {
     return new ObjectMapper()
       .registerModule(new JavaTimeModule())
       .registerModule(javaDateTimeModule())
-      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-      .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
+      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) // 알 수 없는 JSON 속성 무시
+      .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false) // 무시된 필드 예외 무시
       ;
   }
 

@@ -71,6 +71,14 @@ public class User {
   }
 
 
+
+
+
+
+
+
+
+
   /**
    * JWT 사용자 정보 DTO
    */
@@ -94,7 +102,7 @@ public class User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-      return List.of(new SimpleGrantedAuthority(getUserLevel().name()));
+      return List.of(new SimpleGrantedAuthority("ROLE_" + getUserLevel().name()));
     }
 
     @Override
@@ -114,5 +122,20 @@ public class User {
 
     @Override
     public boolean isEnabled() { return getActiveYn() == User.UserActiveYn.Y; }
+
+    @Override
+    public String toString() {
+      return "UserPrincipal{" +
+        "userId='" + getUserId() + '\'' +
+        ", userLevel=" + getUserLevel() +
+        ", activeYn=" + getActiveYn() +
+        ", authorities=" + getAuthorities() +
+        ", accountNonExpired=" + isAccountNonExpired() +
+        ", accountNonLocked=" + isAccountNonLocked() +
+        ", credentialsNonExpired=" + isCredentialsNonExpired() +
+        ", enabled=" + isEnabled() +
+        '}';
+    }
   }
+
 }
