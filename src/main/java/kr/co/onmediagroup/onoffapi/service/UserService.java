@@ -28,6 +28,7 @@ public class UserService {
     String name,
     String password,
     String email,
+    User.UserAdYn adYn,
     LocalDate userBirth,
     User.UserAuthType authType,
     User.UserSocialProvider socialProvider,
@@ -58,6 +59,7 @@ public class UserService {
       .userName(name)
       .userPassword(passwordEncoder.encode(password))
       .userEmail(email)
+      .adYn(adYn)
       .userLevel(User.UserLevel.USER)
       .activeYn(User.UserActiveYn.Y)
       .loginFailCount(0)

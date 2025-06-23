@@ -13,6 +13,7 @@ public class UserVO {
   public record UserReqVO(@NotBlank @Size(min = 2, max = 255) String userName,
                           @Size(max = 255) String userPassword,
                           @NotBlank @Size(min = 2, max = 255) String userEmail,
+                          User.UserAdYn adYn,
                           LocalDate userBirth,
                           @NotNull User.UserAuthType authType,
                           User.UserSocialProvider socialProvider,

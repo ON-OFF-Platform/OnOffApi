@@ -30,6 +30,14 @@ public class User {
 
   @Getter
   @AllArgsConstructor
+  public enum UserAdYn{
+    Y("Y"),
+    N("N");
+    private final String ad;
+  }
+
+  @Getter
+  @AllArgsConstructor
   public enum UserAuthType{
     N("N"),
     S("S");
