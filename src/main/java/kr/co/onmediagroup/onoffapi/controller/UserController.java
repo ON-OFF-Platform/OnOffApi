@@ -26,6 +26,7 @@ public class UserController {
       userReqVO.userName(),
       userReqVO.userPassword(),
       userReqVO.userEmail(),
+      userReqVO.adYn(),
       userReqVO.userBirth(),
       userReqVO.authType(),
       userReqVO.socialProvider(),

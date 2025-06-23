@@ -52,6 +52,11 @@ public class UserEntity {
   private User.UserActiveYn activeYn = User.UserActiveYn.Y;
 
   @NotNull
+  @Enumerated(EnumType.STRING)
+  @Column(name = "ad_yn")
+  private User.UserAdYn adYn = User.UserAdYn.N;
+
+  @NotNull
   @Column(name = "login_fail_count")
   private Integer loginFailCount = 0;
 
