@@ -27,7 +27,7 @@ public class EmailController {
     }
   }
 
-  @GetMapping("/verify")
+  @PostMapping("/verify")
   @ResponseStatus(value = HttpStatus.OK)
   public boolean verify(
     @Valid @RequestBody EmailDTO.EmailVerifyReqVO emailVerifyReqVO

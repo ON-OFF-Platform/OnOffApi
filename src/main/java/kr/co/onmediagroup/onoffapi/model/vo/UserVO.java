@@ -1,5 +1,6 @@
 package kr.co.onmediagroup.onoffapi.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,7 +15,7 @@ public class UserVO {
                           @Size(max = 255) String userPassword,
                           @NotBlank @Size(min = 2, max = 255) String userEmail,
                           User.UserAdYn adYn,
-                          LocalDate userBirth,
+                          @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate userBirth,
                           @NotNull User.UserAuthType authType,
                           User.UserSocialProvider socialProvider,
                           String socialId){
