@@ -2,6 +2,8 @@ package kr.co.onmediagroup.onoffapi.email;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import kr.co.onmediagroup.onoffapi.exception.AlreadyExistException;
+import kr.co.onmediagroup.onoffapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,7 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class EmailService {
   private final JavaMailSender mailSender;
   private final RedisTemplate<String, String> redisTemplate;
-  private static final long CODE_TTL = 300; // 5분
+  private final UserRepository userRepository;
+  private static final long CODE_TTL = 180; // 5분
 
   public String createCode() {
     Random random = new Random();
@@ -30,6 +33,11 @@ public class EmailService {
 
   // 인증코드 발급
   public EmailDTO.EmailResVO sendVerificationMail(String email) throws MessagingException {
+    // 이메일 중복 체크
+    if (userRepository.findById(email).isPresent()) {
+      throw new AlreadyExistException("already exist email");
+    }
+
     // 난수 발생
     String code = createCode();
 

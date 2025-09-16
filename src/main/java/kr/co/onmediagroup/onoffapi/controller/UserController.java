@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +23,8 @@ public class UserController {
   public User.UserResDTO join(
     @Valid @RequestBody UserVO.UserReqVO userReqVO
   ) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     // VO -> DTO
     User.UserResDTO User = this.userService.createUser(
       userReqVO.userName(),
