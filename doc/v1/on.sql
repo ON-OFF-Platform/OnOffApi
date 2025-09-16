@@ -43,7 +43,9 @@ CREATE TABLE `terms` (
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '생성일',
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일자',
   PRIMARY KEY (`terms_id`)
+  INDEX `idx__type__version` (`type`, `version`)
 );
+
 
 CREATE TABLE `schedules` (
   `schedule_id` VARCHAR(255) NOT NULL COMMENT '일정 고유 ID',
@@ -52,14 +54,15 @@ CREATE TABLE `schedules` (
   `content` VARCHAR(255) NOT NULL COMMENT '일정 내용',
   `start_time` DATETIME NOT NULL COMMENT '시작 시간',
   `end_time` DATETIME NOT NULL COMMENT '종료 시간',
-  `is_all_day` ENUM('Y', 'N') DEFAULT 'N' NULL COMMENT '종일 여부',
-  `ctg_name` VARCHAR(255) NOT NULL COMMENT '카테고리 이름',
+  `is_all_day` BOOLEAN NOT NULL DEFAULT 0 COMMENT '종일 여부',
   `location` VARCHAR(200) NULL COMMENT '장소',
-  `created_  at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일자',
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일자',
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정일자',
   PRIMARY KEY (`schedule_id`),
   FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-  FOREIGN KEY (`schedule_ctg_id`) REFERENCES `schedule_ctg` (`schedule_ctg_id`)
+  FOREIGN KEY (`schedule_ctg_id`) REFERENCES `schedule_ctg` (`schedule_ctg_id`),
+  INDEX `idx__user_id__start_time` (`user_id`, `start_time`),
+  INDEX `idx__schedule_ctg_id` (`schedule_ctg_id`)
 );
 
 CREATE TABLE `schedule_ctg` (
@@ -71,7 +74,8 @@ CREATE TABLE `schedule_ctg` (
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일자',
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정일자',
   PRIMARY KEY (`schedule_ctg_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  INDEX `idx__user_id` (`user_id`)
 );
 
 CREATE TABLE `planned_expenses` (
@@ -81,13 +85,16 @@ CREATE TABLE `planned_expenses` (
   `expense_ctg_id` INT NOT NULL COMMENT '지출 카테고리 고유 ID',
   `title` VARCHAR(100) NOT NULL COMMENT '예상 지출 제목',
   `amount` DECIMAL(10,2) NOT NULL COMMENT '예상 지출 금액',
-  `expense_date` DATE NOT NULL COMMENT '예상 지출 날짜',
+  `planned_date` DATE NOT NULL COMMENT '예상 지출 날짜',
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일자',
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정일자',
   PRIMARY KEY (`planned_expenses_id`),
   FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`schedule_id`),
   FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-  FOREIGN KEY (`expense_ctg_id`) REFERENCES `expense_ctg` (`expense_ctg_id`)
+  FOREIGN KEY (`expense_ctg_id`) REFERENCES `expense_ctg` (`expense_ctg_id`),
+  INDEX `idx__user_id__planned_date` (`user_id`, `planned_date`),
+  INDEX `idx__schedule_id` (`schedule_id`),
+  INDEX `idx__expense_ctg_id` (`expense_ctg_id`)
 );
 
 CREATE TABLE `expenses` (
@@ -102,7 +109,9 @@ CREATE TABLE `expenses` (
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정일자',
   PRIMARY KEY (`expense_id`),
   FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-  FOREIGN KEY (`expense_ctg_id`) REFERENCES `expense_ctg` (`expense_ctg_id`)
+  FOREIGN KEY (`expense_ctg_id`) REFERENCES `expense_ctg` (`expense_ctg_id`),
+  INDEX `idx__user_id__expense_date` (`user_id`, `expense_date`),
+  INDEX `idx__expense_ctg_id` (`expense_ctg_id`)
 );
 
 CREATE TABLE `expense_ctg` (
@@ -114,5 +123,6 @@ CREATE TABLE `expense_ctg` (
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일자',
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정일자',
   PRIMARY KEY (`expense_ctg_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  INDEX `idx__user_id` (`user_id`)
 );
