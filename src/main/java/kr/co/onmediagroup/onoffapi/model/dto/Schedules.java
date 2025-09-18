@@ -1,9 +1,6 @@
 package kr.co.onmediagroup.onoffapi.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -37,5 +34,22 @@ public class Schedules {
     private LocalDateTime endTime;
     private Boolean isAllDay;
     private String location;
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public static class ScheduleAndCtgAndColorDTO {
+    private String scheduleId;
+    private String userId;
+    private String content;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private Boolean isAllDay;
+    private String location;
+    private Integer colorId;
+    private String name;
+    private Integer sortOrder;
+    private String colorName;
   }
 }

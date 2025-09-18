@@ -17,6 +17,16 @@ public class SchedulesVO {
     @Size(max = 200) String location
   ) {}
 
+  public record ScheduleUpdateVO(
+    @NotNull String scheduleId,
+    @NotNull Long scheduleCtgId,
+    @NotBlank @Size(max = 255) String content,
+    @NotNull LocalDateTime startTime,
+    @NotNull LocalDateTime endTime,
+    @NotNull Boolean isAllDay,
+    @Size(max = 200) String location
+  ) {}
+
   public record ScheduleDeleteVO(
     @NotNull String scheduleId
   ) {}

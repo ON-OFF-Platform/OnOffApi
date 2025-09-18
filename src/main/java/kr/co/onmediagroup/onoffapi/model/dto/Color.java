@@ -11,7 +11,7 @@ public class Color {
   @Getter
   @AllArgsConstructor
   @NoArgsConstructor
-  public static class colorDTO {
+  public static class ColorDTO {
     private Integer colorId;
     private String colorCode;
     private String colorName;

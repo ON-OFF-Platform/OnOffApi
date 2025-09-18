@@ -2,9 +2,12 @@ package kr.co.onmediagroup.onoffapi.service;
 
 import kr.co.onmediagroup.onoffapi.exception.ScheduleException;
 import kr.co.onmediagroup.onoffapi.model.ModelConverter;
+import kr.co.onmediagroup.onoffapi.model.dto.Color;
 import kr.co.onmediagroup.onoffapi.model.dto.ScheduleCtg;
+import kr.co.onmediagroup.onoffapi.model.entity.ColorEntity;
 import kr.co.onmediagroup.onoffapi.model.entity.ScheduleCtgEntity;
 import kr.co.onmediagroup.onoffapi.model.entity.SchedulesEntity;
+import kr.co.onmediagroup.onoffapi.repository.ColorRepository;
 import kr.co.onmediagroup.onoffapi.repository.ScheduleCtgRepository;
 import kr.co.onmediagroup.onoffapi.repository.SchedulesRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class ScheduleCtgService {
   private final ScheduleCtgRepository scheduleCtgRepository;
   private final SchedulesRepository schedulesRepository;
+  private final ColorRepository colorRepository;
 
   // 카테고리 생성
   public void createCtg(
@@ -140,5 +144,14 @@ public class ScheduleCtgService {
     this.schedulesRepository.saveAll(schedulesEntityList);
 
     this.scheduleCtgRepository.delete(scheduleCtgEntity);
+  }
+
+  public List<Color.ColorDTO> findColor() {
+    List<ColorEntity> colorEntityList = this.colorRepository.findAll();
+
+    List<Color.ColorDTO> colorDTOList = colorEntityList.stream().map(
+      entity -> ModelConverter.MODEL_MAPPER.map(entity, Color.ColorDTO.class)).collect(Collectors.toList());
+
+    return colorDTOList;
   }
 }

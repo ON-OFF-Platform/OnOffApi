@@ -43,6 +43,26 @@ public class ScheduleController {
     );
   }
 
+  @PostMapping("/update/{date}")
+  @ResponseStatus(value = HttpStatus.OK)
+  public void updateSchedule(
+    @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal,
+    @PathVariable String date,
+    @RequestBody @Valid SchedulesVO.ScheduleUpdateVO scheduleUpdateVO
+  ) {
+    scheduleService.updateSchedule(
+      userPrincipal.getUserId(),
+      date,
+      scheduleUpdateVO.scheduleId(),
+      scheduleUpdateVO.scheduleCtgId(),
+      scheduleUpdateVO.content(),
+      scheduleUpdateVO.startTime(),
+      scheduleUpdateVO.endTime(),
+      scheduleUpdateVO.isAllDay(),
+      scheduleUpdateVO.location()
+    );
+  }
+
   /**
    * 일정 삭제 - 한개
    * @param userPrincipal
@@ -86,12 +106,12 @@ public class ScheduleController {
    */
   @GetMapping("/calender/{year}/{month}")
   @ResponseStatus(value = HttpStatus.OK)
-  public List<Schedules.SchedulesDTO> findSchedule(
+  public List<Schedules.ScheduleAndCtgAndColorDTO> findSchedule(
     @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal,
     @PathVariable String year,
     @PathVariable String month
     ) {
-      List<Schedules.SchedulesDTO> schedulesDTOS = scheduleService.findSchedule(
+      List<Schedules.ScheduleAndCtgAndColorDTO> schedulesDTOS = scheduleService.findSchedule(
         userPrincipal.getUserId(),
         year,
         month

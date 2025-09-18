@@ -1,6 +1,7 @@
 package kr.co.onmediagroup.onoffapi.controller;
 
 import jakarta.validation.Valid;
+import kr.co.onmediagroup.onoffapi.model.dto.Color;
 import kr.co.onmediagroup.onoffapi.model.dto.ScheduleCtg;
 import kr.co.onmediagroup.onoffapi.model.dto.User;
 import kr.co.onmediagroup.onoffapi.model.vo.SchedulesVO;
@@ -89,6 +90,19 @@ public class ScheduleCtgController {
     List<ScheduleCtg.ScheduleCtgDTO> scheduleCtgDTOList = this.scheduleCtgService.findAll(userPrincipal.getUserId());
 
     return scheduleCtgDTOList;
+  }
+
+
+  /**
+   * 카테고리 색상 조회
+   * @return
+   */
+  @GetMapping("/color")
+  @ResponseStatus(HttpStatus.OK)
+  public List<Color.ColorDTO> findColor() {
+    List<Color.ColorDTO> colorDTOList = this.scheduleCtgService.findColor();
+
+    return colorDTOList;
   }
 
 

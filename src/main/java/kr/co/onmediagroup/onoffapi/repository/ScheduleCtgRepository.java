@@ -14,5 +14,6 @@ public interface ScheduleCtgRepository extends JpaRepository<ScheduleCtgEntity, 
   @Query("SELECT COALESCE(MAX(c.sortOrder), 0) FROM ScheduleCtgEntity c WHERE c.userId = :userId")
   Integer findMaxSortOrderByUserId(@Param("userId") String userId);
 
-  List<ScheduleCtgEntity> findByUserId(String userId);
+  @Query("SELECT s FROM ScheduleCtgEntity s WHERE s.userId = :userId ORDER BY s.sortOrder asc")
+  List<ScheduleCtgEntity> findByUserId(@Param("userId") String userId);
 }

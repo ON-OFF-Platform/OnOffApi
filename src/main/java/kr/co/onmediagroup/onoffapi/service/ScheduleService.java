@@ -1,5 +1,8 @@
 package kr.co.onmediagroup.onoffapi.service;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import kr.co.onmediagroup.onoffapi.exception.LoginException;
 import kr.co.onmediagroup.onoffapi.exception.ScheduleException;
 import kr.co.onmediagroup.onoffapi.model.ModelConverter;
@@ -16,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -85,20 +89,40 @@ public class ScheduleService {
   }
 
   // 일정 조회
-  public List<Schedules.SchedulesDTO> findSchedule(String userId, String year, String month) {
+  public List<Schedules.ScheduleAndCtgAndColorDTO> findSchedule(String userId, String year, String month) {
 
     // 일정 조회
-    List<SchedulesEntity> schedulesEntities = this.schedulesRepository.findByUserIdAndYearAndMonth(
+    List<Schedules.ScheduleAndCtgAndColorDTO> schedulesDTOList = this.schedulesRepository.findByUserIdAndYearAndMonth(
       userId,
       year,
       month
     );
 
-    List<Schedules.SchedulesDTO> schedulesDTOList = schedulesEntities.stream().map(
-      entity -> ModelConverter.MODEL_MAPPER.map(entity, Schedules.SchedulesDTO.class)
-    ).collect(Collectors.toList());
-
     return schedulesDTOList;
   }
 
+  public void updateSchedule(
+    String userId,
+    String date,
+    String scheduleId,
+    Long scheduleCtgId,
+    String content,
+    LocalDateTime startTime,
+    LocalDateTime endTime,
+    Boolean isAllDay,
+    String location
+  ) {
+    // 유효성 검사
+    SchedulesEntity schedulesEntity = schedulesRepository.findByScheduleIdAndUserId(scheduleId, userId)
+      .orElseThrow(ScheduleException.NoSchedule::new);
+
+    schedulesEntity.setScheduleCtgId(scheduleCtgId);
+    schedulesEntity.setContent(content);
+    schedulesEntity.setStartTime(startTime);
+    schedulesEntity.setEndTime(endTime);
+    schedulesEntity.setIsAllDay(isAllDay);
+    schedulesEntity.setLocation(location);
+
+    schedulesRepository.save(schedulesEntity);
+  }
 }
