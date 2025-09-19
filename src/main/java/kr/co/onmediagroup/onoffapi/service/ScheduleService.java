@@ -1,11 +1,7 @@
 package kr.co.onmediagroup.onoffapi.service;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import kr.co.onmediagroup.onoffapi.exception.LoginException;
 import kr.co.onmediagroup.onoffapi.exception.ScheduleException;
-import kr.co.onmediagroup.onoffapi.model.ModelConverter;
 import kr.co.onmediagroup.onoffapi.model.dto.Schedules;
 import kr.co.onmediagroup.onoffapi.model.entity.SchedulesEntity;
 import kr.co.onmediagroup.onoffapi.model.entity.UserEntity;
@@ -19,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -103,7 +98,6 @@ public class ScheduleService {
 
   public void updateSchedule(
     String userId,
-    String date,
     String scheduleId,
     Long scheduleCtgId,
     String content,
@@ -116,13 +110,34 @@ public class ScheduleService {
     SchedulesEntity schedulesEntity = schedulesRepository.findByScheduleIdAndUserId(scheduleId, userId)
       .orElseThrow(ScheduleException.NoSchedule::new);
 
-    schedulesEntity.setScheduleCtgId(scheduleCtgId);
-    schedulesEntity.setContent(content);
-    schedulesEntity.setStartTime(startTime);
-    schedulesEntity.setEndTime(endTime);
-    schedulesEntity.setIsAllDay(isAllDay);
-    schedulesEntity.setLocation(location);
+    if (!Objects.equals(schedulesEntity.getScheduleCtgId(), scheduleCtgId)) {
+      schedulesEntity.setScheduleCtgId(scheduleCtgId);
+    }
 
-    schedulesRepository.save(schedulesEntity);
+    if (content != null && !content.isBlank() && !schedulesEntity.getContent().equals(content)) {
+      schedulesEntity.setContent(content);
+    }
+
+    if (startTime != null && !schedulesEntity.getStartTime().equals(startTime)) {
+      schedulesEntity.setStartTime(startTime);
+    }
+
+    if (endTime != null && !schedulesEntity.getEndTime().equals(endTime)) {
+      schedulesEntity.setEndTime(endTime);
+    }
+
+    if (isAllDay != null && !schedulesEntity.getIsAllDay().equals(isAllDay)) {
+      schedulesEntity.setIsAllDay(isAllDay);
+    }
+
+    if (location != null && !location.isBlank() && !schedulesEntity.getLocation().equals(location)) {
+      schedulesEntity.setLocation(location);
+    }
+    try {
+      schedulesRepository.saveAndFlush(schedulesEntity);
+    } catch (Exception e) {
+      log.error("Commit failed", e);
+      throw e;
+    }
   }
 }

@@ -22,6 +22,33 @@ public class ScheduleCtgController {
   private final ScheduleCtgService scheduleCtgService;
 
   /**
+   * 카테고리 조회
+   * @param userPrincipal
+   * @return
+   */
+  @GetMapping("/")
+  @ResponseStatus(HttpStatus.OK)
+  public List<ScheduleCtg.ScheduleCtgDTO> findAll(
+    @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal
+  ) {
+    List<ScheduleCtg.ScheduleCtgDTO> scheduleCtgDTOList = this.scheduleCtgService.findAll(userPrincipal.getUserId());
+
+    return scheduleCtgDTOList;
+  }
+
+  /**
+   * 카테고리 색상 조회
+   * @return
+   */
+  @GetMapping("/color")
+  @ResponseStatus(HttpStatus.OK)
+  public List<Color.ColorDTO> findColor() {
+    List<Color.ColorDTO> colorDTOList = this.scheduleCtgService.findColor();
+
+    return colorDTOList;
+  }
+
+  /**
    * 일정 카테고리 생성
    * @param userPrincipal
    * @param scheduleCtgReqVO
@@ -45,7 +72,7 @@ public class ScheduleCtgController {
    * @param userPrincipal
    * @param scheduleCtgUpdateVO
    */
-  @PostMapping("/update")
+  @PatchMapping("/update")
   @ResponseStatus(HttpStatus.OK)
   public void updateCtg(
     @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal,
@@ -65,7 +92,7 @@ public class ScheduleCtgController {
    * @param userPrincipal
    * @param scheduleCtgDeleteVO
    */
-  @PostMapping("/delete")
+  @DeleteMapping("/delete")
   @ResponseStatus(HttpStatus.OK)
   public void deleteCtg(
     @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal,
@@ -76,34 +103,4 @@ public class ScheduleCtgController {
       scheduleCtgDeleteVO.scheduleCtgId()
     );
   }
-
-  /**
-   * 카테고리 조회
-   * @param userPrincipal
-   * @return
-   */
-  @GetMapping("/")
-  @ResponseStatus(HttpStatus.OK)
-  public List<ScheduleCtg.ScheduleCtgDTO> findAll(
-    @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal
-  ) {
-    List<ScheduleCtg.ScheduleCtgDTO> scheduleCtgDTOList = this.scheduleCtgService.findAll(userPrincipal.getUserId());
-
-    return scheduleCtgDTOList;
-  }
-
-
-  /**
-   * 카테고리 색상 조회
-   * @return
-   */
-  @GetMapping("/color")
-  @ResponseStatus(HttpStatus.OK)
-  public List<Color.ColorDTO> findColor() {
-    List<Color.ColorDTO> colorDTOList = this.scheduleCtgService.findColor();
-
-    return colorDTOList;
-  }
-
-
 }

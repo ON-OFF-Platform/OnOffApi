@@ -22,6 +22,29 @@ public class ScheduleController {
   private final ScheduleService scheduleService;
 
   /**
+   * 일정 조회
+   * @param userPrincipal
+   * @param year 조회할 연도 2025
+   * @param month 조회할 월 9, 09
+   * @return 해당 연도-달의 일정 리스트
+   */
+  @GetMapping("/calender/{year}/{month}")
+  @ResponseStatus(value = HttpStatus.OK)
+  public List<Schedules.ScheduleAndCtgAndColorDTO> findSchedule(
+    @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal,
+    @PathVariable String year,
+    @PathVariable String month
+    ) {
+      List<Schedules.ScheduleAndCtgAndColorDTO> schedulesDTOS = scheduleService.findSchedule(
+        userPrincipal.getUserId(),
+        year,
+        month
+      );
+
+      return schedulesDTOS;
+  }
+
+  /**
    * 일정 생성
    * @param userPrincipal
    * @param schedulesReqVO
@@ -43,16 +66,19 @@ public class ScheduleController {
     );
   }
 
-  @PostMapping("/update/{date}")
+  /**
+   * 일정 수정
+   * @param userPrincipal
+   * @param scheduleUpdateVO
+   */
+  @PatchMapping("/update")
   @ResponseStatus(value = HttpStatus.OK)
   public void updateSchedule(
     @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal,
-    @PathVariable String date,
     @RequestBody @Valid SchedulesVO.ScheduleUpdateVO scheduleUpdateVO
   ) {
     scheduleService.updateSchedule(
       userPrincipal.getUserId(),
-      date,
       scheduleUpdateVO.scheduleId(),
       scheduleUpdateVO.scheduleCtgId(),
       scheduleUpdateVO.content(),
@@ -68,7 +94,7 @@ public class ScheduleController {
    * @param userPrincipal
    * @param scheduleDeleteVO
    */
-  @PostMapping("/delete")
+  @DeleteMapping("/delete")
   @ResponseStatus(value = HttpStatus.OK)
   public void deleteSchedule(
     @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal,
@@ -85,7 +111,7 @@ public class ScheduleController {
    * @param userPrincipal
    * @param date
    */
-  @PostMapping("/delete/{date}")
+  @DeleteMapping("/delete/{date}")
   @ResponseStatus(value = HttpStatus.OK)
   public void deleteAllSchedules(
     @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal,
@@ -95,28 +121,5 @@ public class ScheduleController {
       userPrincipal.getUserId(),
       date
     );
-  }
-
-  /**
-   * 일정 조회
-   * @param userPrincipal
-   * @param year 조회할 연도 2025
-   * @param month 조회할 월 9, 09
-   * @return 해당 연도-달의 일정 리스트
-   */
-  @GetMapping("/calender/{year}/{month}")
-  @ResponseStatus(value = HttpStatus.OK)
-  public List<Schedules.ScheduleAndCtgAndColorDTO> findSchedule(
-    @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal,
-    @PathVariable String year,
-    @PathVariable String month
-    ) {
-      List<Schedules.ScheduleAndCtgAndColorDTO> schedulesDTOS = scheduleService.findSchedule(
-        userPrincipal.getUserId(),
-        year,
-        month
-      );
-
-      return schedulesDTOS;
   }
 }
