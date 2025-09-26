@@ -41,6 +41,7 @@ public class Schedules {
   @NoArgsConstructor
   public static class ScheduleAndCtgAndColorDTO {
     private String scheduleId;
+    private Long scheduleCtgId;
     private String userId;
     private String content;
     private LocalDateTime startTime;

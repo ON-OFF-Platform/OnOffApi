@@ -15,6 +15,7 @@ public interface SchedulesRepository extends JpaRepository<SchedulesEntity, Stri
   @Query("""
     SELECT new kr.co.onmediagroup.onoffapi.model.dto.Schedules$ScheduleAndCtgAndColorDTO(
         s.scheduleId,
+        s.scheduleCtgId,
         s.userId,
         s.content,
         s.startTime,

@@ -28,10 +28,10 @@ public class ScheduleCtgController {
    */
   @GetMapping("/")
   @ResponseStatus(HttpStatus.OK)
-  public List<ScheduleCtg.ScheduleCtgDTO> findAll(
+  public List<ScheduleCtg.ScheduleCtgResDTO> findAll(
     @AuthenticationPrincipal User.MinimumUserPrincipal userPrincipal
   ) {
-    List<ScheduleCtg.ScheduleCtgDTO> scheduleCtgDTOList = this.scheduleCtgService.findAll(userPrincipal.getUserId());
+    List<ScheduleCtg.ScheduleCtgResDTO> scheduleCtgDTOList = this.scheduleCtgService.findAll(userPrincipal.getUserId());
 
     return scheduleCtgDTOList;
   }

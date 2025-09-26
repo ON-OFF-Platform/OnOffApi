@@ -61,18 +61,14 @@ public class ScheduleCtgService {
   }
 
   // 카테고리 조회
-  public List<ScheduleCtg.ScheduleCtgDTO> findAll(String userId) {
-    List<ScheduleCtgEntity> scheduleCtgEntityList = this.scheduleCtgRepository.findByUserId(userId);
+  public List<ScheduleCtg.ScheduleCtgResDTO> findAll(String userId) {
+    List<ScheduleCtg.ScheduleCtgResDTO> scheduleCtgEntityList = this.scheduleCtgRepository.findByUserId(userId);
 
     if (scheduleCtgEntityList.isEmpty()) {
       throw new ScheduleException.NoScheduleCtg();
     }
 
-    List<ScheduleCtg.ScheduleCtgDTO> scheduleCtgDTOList = scheduleCtgEntityList.stream().map(
-      entity -> ModelConverter.MODEL_MAPPER.map(entity, ScheduleCtg.ScheduleCtgDTO.class)
-    ).collect(Collectors.toList());
-
-    return scheduleCtgDTOList;
+    return scheduleCtgEntityList;
   }
 
   // 카테고리 업데이트

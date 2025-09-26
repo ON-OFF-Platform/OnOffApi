@@ -19,4 +19,17 @@ public class ScheduleCtg {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
   }
+
+  @Builder
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public static class ScheduleCtgResDTO {
+    private Long scheduleCtgId;
+    private String userId;
+    private String name;
+    private Integer sortOrder;
+    private Integer colorId;
+    private String colorName;
+  }
 }
