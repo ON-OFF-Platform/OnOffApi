@@ -55,7 +55,7 @@ public class User {
   @Data
   @AllArgsConstructor
   @NoArgsConstructor
-  public static class UserReqDTO{
+  public static class UserRequest{
     private String userId;
     private String userName;
     private String userPassword;
@@ -70,7 +70,7 @@ public class User {
   @Data
   @AllArgsConstructor
   @NoArgsConstructor
-  public static class UserResDTO{
+  public static class UserResponse{
     private String userName;
     private String userEmail;
     private User.UserLevel userLevel;

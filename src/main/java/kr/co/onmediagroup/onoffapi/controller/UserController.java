@@ -20,13 +20,13 @@ public class UserController {
 
   @PostMapping("/join")
   @ResponseStatus(value = HttpStatus.CREATED)
-  public User.UserResDTO join(
+  public User.UserResponse join(
     @Valid @RequestBody UserVO.UserReqVO userReqVO
   ) {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     // VO -> DTO
-    User.UserResDTO User = this.userService.createUser(
+    User.UserResponse User = this.userService.createUser(
       userReqVO.userName(),
       userReqVO.userPassword(),
       userReqVO.userEmail(),

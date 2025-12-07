@@ -29,6 +29,6 @@ public class UserVO {
   @Builder
   public record LoginResVO(
     String token,
-    User.UserResDTO user
+    User.UserResponse user
   ) {}
 }

@@ -67,7 +67,7 @@ public class AuthService {
     // 토큰 발급
     String token = this.jwtUtil.createToken(userEntity);
 
-    User.UserResDTO userResDTO = User.UserResDTO.builder()
+    User.UserResponse userResponse = User.UserResponse.builder()
       .userName(userEntity.getUserName())
       .userEmail(userEntity.getUserEmail())
       .userLevel(userEntity.getUserLevel())
@@ -77,7 +77,7 @@ public class AuthService {
 
     return UserVO.LoginResVO.builder()
       .token(token)
-      .user(userResDTO)
+      .user(userResponse)
       .build();
   }
 
