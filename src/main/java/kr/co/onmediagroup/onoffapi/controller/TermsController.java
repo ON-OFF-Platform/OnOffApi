@@ -21,9 +21,9 @@ public class TermsController {
 
   @GetMapping
   @ResponseStatus(value = HttpStatus.OK)
-  public List<Terms.TermsReqDTO> findTermsAll(){
-    List<Terms.TermsReqDTO> termsReqDTOList = termsService.findTermsAll();
+  public List<Terms.TermsReqest> findTermsAll(){
+    List<Terms.TermsReqest> termsReqests = termsService.findTermsAll();
 
-    return termsReqDTOList;
+    return termsReqests;
   }
 }

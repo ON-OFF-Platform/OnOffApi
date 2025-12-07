@@ -19,8 +19,8 @@ import java.time.format.DateTimeFormatter;
  *
  * 적용 포맷:
  * - LocalDate     → "yyyy-MM-dd"
- * - LocalTime     → "kk:mm:ss"  (1~24 시각)
- * - LocalDateTime → "yyyy-MM-dd'T'kk:mm:ss"
+ * - LocalTime     → "HH:mm:ss"  (0~23 시각)
+ * - LocalDateTime → "yyyy-MM-dd'T'HH:mm:ss"
  *
  * */
 public class JacksonUtils {
@@ -60,7 +60,7 @@ public class JacksonUtils {
         SerializerProvider serializerProvider
       )
         throws IOException {
-        jsonGenerator.writeString(DateTimeFormatter.ofPattern("kk:mm:ss").format(localTime));
+        jsonGenerator.writeString(DateTimeFormatter.ofPattern("HH:mm:ss").format(localTime));
       }
     });
 
@@ -72,7 +72,7 @@ public class JacksonUtils {
         JsonGenerator jsonGenerator,
         SerializerProvider serializerProvider
       ) throws IOException {
-        jsonGenerator.writeString(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'kk:mm:ss").format(localDateTime));
+        jsonGenerator.writeString(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss").format(localDateTime));
       }
     });
 

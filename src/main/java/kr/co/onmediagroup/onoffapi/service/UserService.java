@@ -24,7 +24,7 @@ public class UserService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
-  public User.UserResDTO createUser(
+  public User.UserResponse createUser(
     String name,
     String password,
     String email,
@@ -71,7 +71,7 @@ public class UserService {
 
     userRepository.save(userEntity);
 
-    User.UserResDTO userResDTO = MODEL_MAPPER.map(userEntity, User.UserResDTO.class);
-    return userResDTO;
+    User.UserResponse userResponse = MODEL_MAPPER.map(userEntity, User.UserResponse.class);
+    return userResponse;
   }
 }
