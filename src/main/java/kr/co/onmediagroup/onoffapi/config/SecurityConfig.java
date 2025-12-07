@@ -52,7 +52,7 @@ public class SecurityConfig {
       .authorizeHttpRequests(auth -> auth
         .requestMatchers("/auth/**").permitAll()
         .requestMatchers("/join/**").permitAll()
-        .requestMatchers("/error").permitAll()
+        .requestMatchers("/error/**").permitAll()
         .anyRequest().authenticated()
       )
       // 인증 실패 시 예외 처리
