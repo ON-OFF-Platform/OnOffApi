@@ -28,7 +28,7 @@ public class Terms {
   @Data
   @AllArgsConstructor
   @NoArgsConstructor
-  public static class TermsReqDTO{
+  public static class TermsReqest{
     private Integer termsId;
     private Terms.TermsType type;
     private String title;

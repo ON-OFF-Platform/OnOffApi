@@ -21,17 +21,17 @@ import static kr.co.onmediagroup.onoffapi.model.ModelConverter.MODEL_MAPPER;
 public class TermsService {
   private final TermsRepository termsRepository;
 
-  public List<Terms.TermsReqDTO> findTermsAll() {
+  public List<Terms.TermsReqest> findTermsAll() {
     List<TermsEntity> termsEntityList = termsRepository.findAll();
 
     if (termsEntityList.isEmpty()) {
       throw new TermsException.NoTerms();
     }
 
-    List<Terms.TermsReqDTO> termsReqDTOList = termsEntityList.stream()
-      .map(entity -> MODEL_MAPPER.map(entity, Terms.TermsReqDTO.class))
+    List<Terms.TermsReqest> termsReqests = termsEntityList.stream()
+      .map(entity -> MODEL_MAPPER.map(entity, Terms.TermsReqest.class))
       .collect(Collectors.toList());
 
-    return termsReqDTOList;
+    return termsReqests;
   }
 }

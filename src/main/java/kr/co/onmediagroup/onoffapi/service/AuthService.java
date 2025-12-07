@@ -77,7 +77,7 @@ public class AuthService {
 
     return UserVO.LoginResVO.builder()
       .token(token)
-      .userResDTO(userResDTO)
+      .user(userResDTO)
       .build();
   }
 

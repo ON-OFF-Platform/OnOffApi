@@ -46,7 +46,7 @@ public class EmailService {
       "<body style=\"font-family: Arial, sans-serif; background-color: #f4f4f4; margin:0; padding:0;\">" +
       "<div style=\"background-color:#ffffff; width:600px; margin:30px auto; padding:30px; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:center;\">" +
       "<h1 style=\"color:#86BD98; margin-bottom:20px;\">ON_OFF 인증번호 안내</h1>" +
-      "<p style=\"font-size:16px; color:#333333;\">아래 인증번호를 5분 이내에 입력해주세요.</p>" +
+      "<p style=\"font-size:16px; color:#333333;\">아래 인증번호를 3분 이내에 입력해주세요.</p>" +
       "<div style=\"display:inline-block; margin:20px 0; padding:15px 25px; font-size:24px; font-weight:bold; background-color:#f0f0f0; border-radius:8px; letter-spacing:4px; color:#86BD98;\">" +
       code +
       "</div>" +
