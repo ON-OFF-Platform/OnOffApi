@@ -3,10 +3,12 @@ package kr.co.onmediagroup.onoffapi.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 public class User {
 
@@ -28,6 +30,14 @@ public class User {
 
   @Getter
   @AllArgsConstructor
+  public enum UserAdYn{
+    Y("Y"),
+    N("N");
+    private final String ad;
+  }
+
+  @Getter
+  @AllArgsConstructor
   public enum UserAuthType{
     N("N"),
     S("S");
@@ -45,7 +55,7 @@ public class User {
   @Data
   @AllArgsConstructor
   @NoArgsConstructor
-  public static class UserReqDTO{
+  public static class UserRequest{
     private String userId;
     private String userName;
     private String userPassword;
@@ -60,13 +70,21 @@ public class User {
   @Data
   @AllArgsConstructor
   @NoArgsConstructor
-  public static class UserResDTO{
+  public static class UserResponse{
     private String userName;
     private String userEmail;
     private User.UserLevel userLevel;
     private User.UserActiveYn activeYn;
     private LocalDate userBirth;
   }
+
+
+
+
+
+
+
+
 
 
   /**
@@ -80,23 +98,26 @@ public class User {
   public static class MinimumUserPrincipal {
     private String userId;
     private User.UserLevel userLevel;
+    private User.UserActiveYn activeYn;
   }
 
   public static class UserPrincipal extends MinimumUserPrincipal implements UserDetails {
 
     @Builder
     public UserPrincipal(String userId, User.UserLevel userLevel, User.UserActiveYn activeYn) {
-      super(userId, userLevel);
+      super(userId, userLevel, activeYn);
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() { return null; }
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+      return List.of(new SimpleGrantedAuthority("ROLE_" + getUserLevel().name()));
+    }
 
     @Override
     public String getPassword() { return null; }
 
     @Override
-    public String getUsername() { return null; }
+    public String getUsername() { return getUserId(); }
 
     @Override
     public boolean isAccountNonExpired() { return false; }
@@ -108,6 +129,21 @@ public class User {
     public boolean isCredentialsNonExpired() { return false; }
 
     @Override
-    public boolean isEnabled() { return false; }
+    public boolean isEnabled() { return getActiveYn() == User.UserActiveYn.Y; }
+
+    @Override
+    public String toString() {
+      return "UserPrincipal{" +
+        "userId='" + getUserId() + '\'' +
+        ", userLevel=" + getUserLevel() +
+        ", activeYn=" + getActiveYn() +
+        ", authorities=" + getAuthorities() +
+        ", accountNonExpired=" + isAccountNonExpired() +
+        ", accountNonLocked=" + isAccountNonLocked() +
+        ", credentialsNonExpired=" + isCredentialsNonExpired() +
+        ", enabled=" + isEnabled() +
+        '}';
+    }
   }
+
 }

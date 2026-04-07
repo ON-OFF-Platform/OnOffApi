@@ -12,6 +12,17 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Jackson 전역 설정 유틸리티 클래스
+ *
+ * ObjectMapper 인스턴스를 전역에서 재사용할 수 있도록 제공
+ *
+ * 적용 포맷:
+ * - LocalDate     → "yyyy-MM-dd"
+ * - LocalTime     → "HH:mm:ss"  (0~23 시각)
+ * - LocalDateTime → "yyyy-MM-dd'T'HH:mm:ss"
+ *
+ * */
 public class JacksonUtils {
   public static final ObjectMapper OBJECT_MAPPER = createObjectMapper();
 
@@ -19,8 +30,8 @@ public class JacksonUtils {
     return new ObjectMapper()
       .registerModule(new JavaTimeModule())
       .registerModule(javaDateTimeModule())
-      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-      .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
+      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) // 알 수 없는 JSON 속성 무시
+      .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false) // 무시된 필드 예외 무시
       ;
   }
 
@@ -49,7 +60,7 @@ public class JacksonUtils {
         SerializerProvider serializerProvider
       )
         throws IOException {
-        jsonGenerator.writeString(DateTimeFormatter.ofPattern("kk:mm:ss").format(localTime));
+        jsonGenerator.writeString(DateTimeFormatter.ofPattern("HH:mm:ss").format(localTime));
       }
     });
 
@@ -61,7 +72,7 @@ public class JacksonUtils {
         JsonGenerator jsonGenerator,
         SerializerProvider serializerProvider
       ) throws IOException {
-        jsonGenerator.writeString(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'kk:mm:ss").format(localDateTime));
+        jsonGenerator.writeString(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss").format(localDateTime));
       }
     });
 

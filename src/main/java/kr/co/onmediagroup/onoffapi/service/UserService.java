@@ -24,10 +24,11 @@ public class UserService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
-  public User.UserResDTO createUser(
+  public User.UserResponse createUser(
     String name,
     String password,
     String email,
+    User.UserAdYn adYn,
     LocalDate userBirth,
     User.UserAuthType authType,
     User.UserSocialProvider socialProvider,
@@ -58,6 +59,7 @@ public class UserService {
       .userName(name)
       .userPassword(passwordEncoder.encode(password))
       .userEmail(email)
+      .adYn(adYn)
       .userLevel(User.UserLevel.USER)
       .activeYn(User.UserActiveYn.Y)
       .loginFailCount(0)
@@ -69,7 +71,7 @@ public class UserService {
 
     userRepository.save(userEntity);
 
-    User.UserResDTO userResDTO = MODEL_MAPPER.map(userEntity, User.UserResDTO.class);
-    return userResDTO;
+    User.UserResponse userResponse = MODEL_MAPPER.map(userEntity, User.UserResponse.class);
+    return userResponse;
   }
 }

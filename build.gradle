@@ -27,6 +27,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -62,8 +63,21 @@ dependencies {
     // https://mvnrepository.com/artifact/com.auth0/java-jwt
     implementation 'com.auth0:java-jwt:4.4.0'
 
+    // 메일
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // https://mvnrepository.com/artifact/io.lettuce/lettuce-core
+    implementation 'io.lettuce:lettuce-core:6.7.1.RELEASE'
+
+    // KoreanLunarCalendar
+    implementation 'com.github.usingsky:KoreanLunarCalendar:0.3.1'
+
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 }
 
 test {

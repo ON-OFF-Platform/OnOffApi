@@ -2,6 +2,9 @@ package kr.co.onmediagroup.onoffapi.exception;
 
 import lombok.Getter;
 
+/**
+ * 로그인 관련 예외 처리
+ * */
 @Getter
 public class LoginException extends RuntimeException{
   private final Integer loginFailCount;
@@ -31,7 +34,7 @@ public class LoginException extends RuntimeException{
   // 비활성화 계정 로그인 시도
   public static class DeactivatedUser extends LoginException {
     public DeactivatedUser(Integer loginFailCount) {
-      super("too many failed login", loginFailCount);
+      super("deactivated user", loginFailCount);
     }
   }
 

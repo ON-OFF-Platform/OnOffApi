@@ -36,6 +36,8 @@ public class JWTUtil {
     return JWT.create()
       .withSubject(user.getUserId()) // 사용자 식별자
       .withClaim("userLevel", user.getUserLevel().name()) // 권한
+      .withClaim("activeYn", user.getActiveYn().name()) // 활성 상태
+      .withClaim("type", "ACCESS")
       .withExpiresAt(expiredDate) // 만료 시간
       .sign(algorithm); // 비밀키 알고리즘으로 서명
   }
@@ -45,7 +47,7 @@ public class JWTUtil {
    * @param token 클라이언트로부터 전달받은 JWT
    * @return 유효하면 true, 유효하지 않으면 false
    */
-  public boolean inValidToken(String token) {
+  public boolean verifyToken(String token) {
     try {
       JWT.require(jwtConfig.getAlgorithm())
         .build()
@@ -65,18 +67,28 @@ public class JWTUtil {
    * @param token
    * @return User.UserPrincipal
    */
-  public User.UserPrincipal getUserPrincipal(String token) {
-    DecodedJWT decodedJWT = JWT.require(jwtConfig.getAlgorithm())
-      .build()
-      .verify(token);
+  public User.UserPrincipal verifyTokenWithUserPrincipal(String token) {
+    try {
+      DecodedJWT decodedJWT = JWT.require(jwtConfig.getAlgorithm())
+        .build()
+        .verify(token);
 
-    String userId = decodedJWT.getSubject();
-    String userLevel = decodedJWT.getClaim("userLevel").asString();
+      String userId = decodedJWT.getSubject();
+      String userLevel = decodedJWT.getClaim("userLevel").asString();
+      String activeYn = decodedJWT.getClaim("activeYn").asString();
 
-    return User.UserPrincipal.builder()
-      .userId(userId)
-      .userLevel(User.UserLevel.valueOf(userLevel))
-      .build();
+      return User.UserPrincipal.builder()
+        .userId(userId)
+        .userLevel(User.UserLevel.valueOf(userLevel))
+        .activeYn(User.UserActiveYn.valueOf(activeYn))
+        .build();
+    } catch (JWTVerificationException e) {
+      log.warn("JWT 토큰 검증 실패: {}", e.getMessage());
+      return null;
+    } catch (Exception e) {
+      log.error("JWT 사용자 정보 추출 중 에러", e);
+      return null;
+    }
   }
 
 }

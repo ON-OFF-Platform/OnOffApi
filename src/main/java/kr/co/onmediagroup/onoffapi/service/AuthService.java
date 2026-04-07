@@ -1,6 +1,5 @@
 package kr.co.onmediagroup.onoffapi.service;
 
-import jakarta.transaction.Transactional;
 import kr.co.onmediagroup.onoffapi.config.AuthConfig;
 import kr.co.onmediagroup.onoffapi.exception.LoginException;
 import kr.co.onmediagroup.onoffapi.model.dto.User;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -23,6 +23,8 @@ public class AuthService {
   private final PasswordEncoder passwordEncoder;
   private final JWTUtil jwtUtil;
 
+  // 해당 예외가 발생해도 rollback 안 되고, save() 반영됨.
+  @Transactional(noRollbackFor = {LoginException.InvalidPassword.class})
   public UserVO.LoginResVO login(UserVO.LoginReqVO loginReqVO) {
     String userId = loginReqVO.userId();
     String password = loginReqVO.password();
@@ -48,11 +50,14 @@ public class AuthService {
     // 비밀번호 확인
     String userPwHash = userEntity.getUserPassword();
     boolean isMatchedPwd = this.passwordEncoder.matches(password, userPwHash);
+    log.info("로그인 확인 : {}", userEntity.getLoginFailCount());
 
     if (!isMatchedPwd) {
       userEntity = userEntity.increaseFailedLogin(maxLoginFailCount);
+      log.info("로그인 최대 : {}", userEntity.getLoginFailCount());
       userEntity = this.userRepository.save(userEntity);
-      throw new LoginException.InvalidPassword(currentLoginFailCount);
+      log.info("로그인 오류 횟수 : {}", userEntity.getLoginFailCount());
+      throw new LoginException.InvalidPassword(userEntity.getLoginFailCount());
     }
 
     // 로그인 성공 시, 로그인 실패 횟수 초기화
@@ -62,7 +67,7 @@ public class AuthService {
     // 토큰 발급
     String token = this.jwtUtil.createToken(userEntity);
 
-    User.UserResDTO userResDTO = User.UserResDTO.builder()
+    User.UserResponse userResponse = User.UserResponse.builder()
       .userName(userEntity.getUserName())
       .userEmail(userEntity.getUserEmail())
       .userLevel(userEntity.getUserLevel())
@@ -72,7 +77,7 @@ public class AuthService {
 
     return UserVO.LoginResVO.builder()
       .token(token)
-      .userResDTO(userResDTO)
+      .user(userResponse)
       .build();
   }
 
